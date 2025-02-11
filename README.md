@@ -1,4 +1,4 @@
-# Specify Bulk Changes Tool
+# Specify Edit Bot
 
 This tool allows for bulk editing of a given table in Specify 7 via id numbers.
 
