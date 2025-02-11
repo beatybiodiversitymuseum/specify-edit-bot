@@ -62,7 +62,7 @@ class SpecifySession:
             time.sleep(sleep_in_seconds)
             # Sanity check
             if not id.isnumeric():
-                raise RuntimeError("The id's in the data are not properly formatted")
+                raise RuntimeError("The ids in the data are not properly formatted")
             if not isinstance(values, dict):
                 raise RuntimeError("The values in the data are not properly formatted")
 
@@ -96,7 +96,7 @@ class SpecifySession:
             time.sleep(sleep_in_seconds)
             # Sanity check
             if not id.isnumeric():
-                raise RuntimeError("The id's in the data are not properly formatted")
+                raise RuntimeError("The ids in the data are not properly formatted")
 
             # Get the version of the table via a generic get request to the table
             get_table = self.S.get(
