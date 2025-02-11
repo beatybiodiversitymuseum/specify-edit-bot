@@ -29,7 +29,7 @@ Input data should be defined as a csv file. The left-most column should contain 
 
 Note that relationships to other tables just need to be defined by their appropriate API route. Edits to fields within the same table just need to adhere to business rule and type requirements for that field.
 
-Depending on if your data file is csv or tab delimited, you may need to change the `sep=` argument within `pd.read_csv` in `modules/data.py`. Tab delimited files should use `sep='\t'` while csv delimited files should not need the `sep=` argument at all.
+Depending on if your data file is csv or tab delimited, you may need to change the `sep=` argument within `pd.read_csv` in `helpers/data.py`. Tab delimited files should use `sep='\t'` while csv delimited files should not need the `sep=` argument at all.
 
 ## Usage
 
