@@ -18,7 +18,8 @@ def main(
     # Load the environment variables from the .env file
     load_dotenv()
 
-    # Load the data from a flat file and convert to a json format that can be ingested by the API
+    # Load the data from a flat file and convert to a json format that can be
+    # ingested by the API
     json_data = convert_df_to_json(load_data(input_data_filepath))
 
     # Create a session to make requests to

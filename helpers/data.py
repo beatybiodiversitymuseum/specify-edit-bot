@@ -1,5 +1,6 @@
 """
-This module converts the data contained in a flat file (csv) to a json representation of the same data, so that it may be ingested by the Specify API
+This module converts the data contained in a flat file (csv) to a json
+representation of the same data, so that it may be ingested by the Specify API
 """
 
 import pandas as pd
@@ -16,7 +17,9 @@ def load_data(filepath: str) -> pd.DataFrame:
 
 def convert_df_to_json(df: pd.DataFrame) -> dict:
     """
-    Converts a pandas dataframe with a catalog number to a dictionary that contains the catalog number as the key and a json representation of the data contained within all other columns
+    Converts a pandas dataframe with a catalog number to a dictionary that
+    contains the catalog number as the key and a json representation of the data
+     contained within all other columns.
     """
     result = df.to_json(orient="index")
     parsed = loads(result)

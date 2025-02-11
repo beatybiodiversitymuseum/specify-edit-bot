@@ -1,5 +1,6 @@
 """
-This module handles requests made to the instance, including logging in and modifying data.
+This module handles requests made to the instance, including logging in and
+modifying data.
 """
 
 import json
@@ -11,7 +12,9 @@ import warnings
 
 class SpecifySession:
     """
-    Initiates a requests session with a specify instance using the username and password supplied. To obtain the collectionid, run a query for collection name and collection id from within the Specify GUI.
+    Initiates a requests session with a specify instance using the username and
+    password supplied. To obtain the collectionid, run a query for collection
+    name and collection id from within the Specify GUI.
     """
 
     S = requests.Session()
@@ -24,9 +27,12 @@ class SpecifySession:
 
     def login(self):
         """
-        Log into the collection using the credentials supplied. This method must be run before any other requests can be made.
+        Log into the collection using the credentials supplied. This method must
+         be run before any other requests can be made.
         """
-        available_collections = self.S.get(self.instance_url + "/context/login/")
+        available_collections = self.S.get(
+            self.instance_url + "/context/login/"
+        )
         token = available_collections.cookies["csrftoken"]
         data = {
             "username": self.username,
@@ -54,21 +60,35 @@ class SpecifySession:
 
         return None
 
-    def put_data(self, data_to_add: dict, table: str, sleep_in_seconds=4.5) -> None:
+    def put_data(
+        self, data_to_add: dict, table: str, sleep_in_seconds=4.5
+    ) -> None:
         """
-        Takes json data with a series of id objects with corresponding dictionaries of data to be added to the system, and adds all data through put requests. The table argument must be spelled exactly as it is required in the request url.
+        Takes json data with a series of id objects with corresponding
+        dictionaries of data to be added to the system, and adds all data
+        through put requests. The table argument must be spelled exactly as it
+        is required in the request url.
         """
         for id, values in tqdm(data_to_add.items(), desc="Uploading records"):
             time.sleep(sleep_in_seconds)
             # Sanity check
             if not id.isnumeric():
-                raise RuntimeError("The ids in the data are not properly formatted")
+                raise RuntimeError(
+                    "The ids in the data are not properly formatted"
+                )
             if not isinstance(values, dict):
-                raise RuntimeError("The values in the data are not properly formatted")
+                raise RuntimeError(
+                    "The values in the data are not properly formatted"
+                )
 
             # Get the version of the table via a generic get request to the table
             get_table = self.S.get(
-                self.instance_url + "/api/specify/" + table + "/" + str(id) + "/",
+                self.instance_url
+                + "/api/specify/"
+                + table
+                + "/"
+                + str(id)
+                + "/",
                 headers=self.headers,
             )
             version = get_table.json()["version"]
@@ -88,19 +108,31 @@ class SpecifySession:
         self, data_to_delete: dict, table: str, sleep_in_seconds=4.5
     ) -> None:
         """
-        Takes json data with a series of id objects with corresponding dictionaries of data to be added to the system, and removes the records corresponding with those ids. The table argument must be spelled exactly as it is required in the request url.
+        Takes json data with a series of id objects with corresponding
+        dictionaries of data to be added to the system, and removes the records
+        corresponding with those ids. The table argument must be spelled exactly
+         as it is required in the request url.
 
-        Note, the dictionary structure is still kept, which allows for both a similar setup to the put requests, but also allows for data to be kept alongside the ids for convenience, it is just not touched by the script.
+        Note, the dictionary structure is still kept, which allows for both a
+        similar setup to the put requests, but also allows for data to be kept
+        alongside the ids for convenience, it is just not touched by the script.
         """
         for id, values in tqdm(data_to_delete.items(), desc="Deleting records"):
             time.sleep(sleep_in_seconds)
             # Sanity check
             if not id.isnumeric():
-                raise RuntimeError("The ids in the data are not properly formatted")
+                raise RuntimeError(
+                    "The ids in the data are not properly formatted"
+                )
 
             # Get the version of the table via a generic get request to the table
             get_table = self.S.get(
-                self.instance_url + "/api/specify/" + table + "/" + str(id) + "/",
+                self.instance_url
+                + "/api/specify/"
+                + table
+                + "/"
+                + str(id)
+                + "/",
                 headers=self.headers,
             )
             version = get_table.json()["version"]
@@ -111,5 +143,7 @@ class SpecifySession:
                 headers=self.headers,
             )
             if delete_request.status_code != 204:
-                warnings.warn("An error occurred while deleting record with id:" + id)
+                warnings.warn(
+                    "An error occurred while deleting record with id:" + id
+                )
         return None
