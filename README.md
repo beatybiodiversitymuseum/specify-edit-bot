@@ -39,6 +39,6 @@ All non-secret variables that need to be adjusted to define the task are in `mai
 - `method`: Either `edit` or `delete`. If the method is `edit`, then the program will edit existing values based on what is defined in the input table. If the method is `delete`, then a list of ids is all that is required (if data is present it will be ignored), and the program will attempt to delete records with that id from the specified table. Note that Specify has delete blockers which may prevent a record from being deleted if it has dependents. The program will stop with an error if an API call results in a non-successful status code.
 - `table`: The table to perform the edits on. Must match the table name as defined in the API documentation. For example, `collectionobject`
 - `collectionid`: The collection id that defines the collection to edit. Required for logging in.
-- `input_data_filepath`: The filepath which the program should look to for the input data. Default is `data/data.csv`
+- `input_data_filepath`: The filepath which the program should look to for the input data. Default is `data/data.csv`. If you do not use this path, you should add the path to `.gitignore` if it is within the repository.
 
 Once the variables above have been defined, you may run `main.py`. A progress bar will display in the terminal to show the estimated time to complete the edits. To avoid excess strain on the specify instance, the program is set to wait 4.5 seconds between api calls.
