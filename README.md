@@ -6,6 +6,15 @@ This tool allows for bulk editing of a given table in Specify 7 via id numbers.
 
 Before using the script, a dedicated specify user should be created in the instance and given a descriptive name that identifies it as a bot (such as `bulk_edit_bot`). It should be given the *lowest permissions* required to perform its task. Usually this is `update` or `delete` permissions in the target table, and `read` access to any tables which are required for that table to load.
 
+### Clone the repository
+
+To get a copy of all the required code, you can clone this repository to your machine
+
+```sh
+git clone https://github.com/beatybiodiversitymuseum/specify-edit-bot
+cd specify-edit-bot
+```
+
 ### Dependencies
 
 All required dependencies are listed in `requirements.txt`. They can be installed via `pip install -r requirements.txt`. A virtual environment is recommended.
