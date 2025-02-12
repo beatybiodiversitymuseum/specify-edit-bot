@@ -42,3 +42,7 @@ All non-secret variables that need to be adjusted to define the task are in `mai
 - `input_data_filepath`: The filepath which the program should look to for the input data. Default is `data/data.csv`. If you do not use this path, you should add the path to `.gitignore` if it is within the repository.
 
 Once the variables above have been defined, you may run `main.py`. A progress bar will display in the terminal to show the estimated time to complete the edits. To avoid excess strain on the specify instance, the program is set to wait 4.5 seconds between api calls.
+
+## Testing
+
+To run unit tests, simply run `pytest` from the terminal prompt. The tests will run against the sp7demofish instance and use data defined in `tests/data/test-data.csv`, not the instance you have configured through environment variables.
