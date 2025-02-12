@@ -11,7 +11,7 @@ Before using the script, a dedicated specify user should be created in the insta
 To get a copy of all the required code, you can clone this repository to your machine
 
 ```sh
-git clone https://github.com/beatybiodiversitymuseum/specify-edit-bot
+git clone https://github.com/beatybiodiversitymuseum/specify-edit-bot.git
 cd specify-edit-bot
 ```
 
