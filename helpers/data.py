@@ -27,3 +27,17 @@ def convert_df_to_json(df: pd.DataFrame) -> dict:
     parsed = loads(result)
     json_object = json.loads(dumps(parsed, indent=4))
     return json_object
+
+
+def confirmation(json_object: dict, method: str, table: str) -> bool:
+    """
+    Formats information about the data and its destination and presents to
+    the user for confirmation
+    """
+    print(
+        f"You are about to {method} {len(json_object)} records in the {table} table."
+    )
+    confirm = input("Do you wish to proceed? (y/n)")
+    if confirm == "y":
+        return True
+    return False
