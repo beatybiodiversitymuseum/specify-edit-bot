@@ -16,6 +16,27 @@ def test_load_data():
     )
 
 
+def test_subtables():
+    test_df = pd.DataFrame(
+        {
+            "id": ["1", "2"],
+            "collectionobjectattribute": [
+                {"text1": "test", "text2": "test"},
+                {"text1": "test", "text2": "test"},
+            ],
+        }
+    )
+    test_df.set_index("id", inplace=True)
+    pd.testing.assert_frame_equal(
+        load_data(
+            filepath="tests/data/test-data-subtable.csv",
+            skip_blank_rows=False,
+            subtables=["collectionobjectattribute"],
+        ),
+        test_df,
+    )
+
+
 def test_skip_rows():
     test_df = pd.DataFrame({"id": ["1", "3"], "test4": ["test", "test"]})
     test_df.set_index("id", inplace=True)
