@@ -8,12 +8,18 @@ from json import loads, dumps
 import json
 
 
-def load_data(filepath: str, skip_blank_rows: bool) -> pd.DataFrame:
+def load_data(
+    filepath: str, skip_blank_rows=True, subtables=[]
+) -> pd.DataFrame:
     """Convert data (csv) from a filepath and output a dataframe"""
     df = pd.read_csv(filepath, header=0, dtype="str")
     df.set_index("id", inplace=True)
     if skip_blank_rows:
         df = df.dropna(how="all")
+    for subtable in subtables:
+        df[subtable] = df[~df[subtable].isna()][subtable].apply(
+            lambda st_dict: json.loads(st_dict.replace("'", '"'))
+        )
     return df
 
 
