@@ -1,8 +1,9 @@
-from helpers.data import load_data, convert_df_to_json
+from helpers.data import load_data, convert_df_to_json, confirmation
 from helpers.caller import SpecifySession
 
 from dotenv import load_dotenv
 import os
+import sys
 
 
 def main(
@@ -33,10 +34,16 @@ def main(
     # Log in
     session.login()
 
-    if method == "edit":
-        session.put_data(json_data, table=table)
-    if method == "delete":
-        session.delete_data(json_data, table=table)
+    ack = confirmation(method=method, json_object=json_data, table=table)
+    if not ack:
+        sys.exit(
+            "Configuration not accepted. Program will exit without making changes"
+        )
+
+    if method == "edit" and ack:
+        session.put_data(data_to_add=json_data, table=table)
+    if method == "delete" and ack:
+        session.delete_data(data_to_delete=json_data, table=table)
 
 
 if __name__ == "__main__":
