@@ -11,6 +11,8 @@ def main(
     method: str,
     table: str,
     collectionid: int,
+    subtables=[],
+    skip_blank_rows=False,
     input_data_filepath="data/data.csv",
 ):
     if method not in ["edit", "delete"]:
@@ -21,7 +23,13 @@ def main(
 
     # Load the data from a flat file and convert to a json format that can be
     # ingested by the API
-    json_data = convert_df_to_json(load_data(input_data_filepath))
+    json_data = convert_df_to_json(
+        load_data(
+            input_data_filepath=input_data_filepath,
+            skip_blank_rows=skip_blank_rows,
+            subtables=subtables,
+        )
+    )
 
     # Create a session to make requests to
     session = SpecifySession(
