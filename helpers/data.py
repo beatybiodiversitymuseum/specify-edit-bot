@@ -18,7 +18,7 @@ def load_data(
         df = df.dropna(how="all")
     for subtable in subtables:
         df[subtable] = df[~df[subtable].isna()][subtable].apply(
-            lambda st_dict: json.loads(st_dict.replace("'", '"'))
+            lambda st_dict: json.loads(r"{}".format(st_dict))
         )
     return df
 

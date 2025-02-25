@@ -25,7 +25,7 @@ def main(
     # ingested by the API
     json_data = convert_df_to_json(
         load_data(
-            input_data_filepath=input_data_filepath,
+            filepath=input_data_filepath,
             skip_blank_rows=skip_blank_rows,
             subtables=subtables,
         )
