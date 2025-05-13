@@ -54,6 +54,10 @@ All non-secret variables that need to be adjusted to define the task are in `mai
 
 Once the variables above have been defined, you may run `main.py`. A progress bar will display in the terminal to show the estimated time to complete the edits. To avoid excess strain on the specify instance, the program is set to wait 4.5 seconds between api calls.
 
+## Logging
+
+By default, the program will print logs to the `logging` directory, relative to the repository. This repository is ignored by git. This will give timestamps for each edit or deletion action performed.
+
 ## Testing
 
 To run unit tests, simply run `pytest` from the terminal prompt. The tests will run against the sp7demofish instance and use data defined in `tests/data/test-data.csv`, not the instance you have configured through environment variables.

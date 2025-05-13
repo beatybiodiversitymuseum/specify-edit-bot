@@ -5,9 +5,16 @@ modifying data.
 
 import json
 import requests
+
+from requests.adapters import HTTPAdapter, Retry
+
 import time
 from tqdm import tqdm
 import warnings
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SpecifySession:
@@ -69,6 +76,12 @@ class SpecifySession:
         through put requests. The table argument must be spelled exactly as it
         is required in the request url.
         """
+        # Redundancy in case the network cuts out,
+        # retries after 0s, 2s, 4s, 8s, 16s
+        retries = Retry(
+            total=5, backoff_factor=1, status_forcelist=[502, 503, 504]
+        )
+        self.S.mount(self.instance_url, HTTPAdapter(max_retries=retries))
         for id, values in tqdm(data_to_add.items(), desc="Uploading records"):
             time.sleep(sleep_in_seconds)
             # Sanity check
@@ -81,27 +94,44 @@ class SpecifySession:
                     "The values in the data are not properly formatted"
                 )
 
-            # Get the version of the table via a generic get request to the table
-            get_table = self.S.get(
-                self.instance_url
-                + "/api/specify/"
-                + table
-                + "/"
-                + str(id)
-                + "/",
-                headers=self.headers,
+            # Get the version of the table via a generic get request to the
+            # table
+            try:
+                get_table = self.S.get(
+                    self.instance_url
+                    + "/api/specify/"
+                    + table
+                    + "/"
+                    + str(id)
+                    + "/",
+                    headers=self.headers,
+                )
+                get_table.raise_for_status()
+                version = get_table.json()["version"]
+                data = values
+                params = {"version": version}
+                put_request = self.S.put(
+                    url=(self.base_url + table + "/" + str(id) + "/"),
+                    params=params,
+                    data=json.dumps(data),
+                    headers=self.headers,
+                )
+                if put_request.status_code != 200:
+                    warnings.warn(
+                        f"An error occurred while editing id:{id} \
+                        {put_request.text}"
+                    )
+            except requests.exceptions.HTTPError as errh:
+                print("Http Error:", errh)
+            except requests.exceptions.ConnectionError as errc:
+                print("Error Connecting", errc)
+            except requests.exceptions.Timeout as errt:
+                print("Timeout Error:", errt)
+
+            logger.info(
+                f"{table} with id {id} successfully edited at {datetime.now()}."
             )
-            version = get_table.json()["version"]
-            data = values
-            params = {"version": version}
-            put_request = self.S.put(
-                url=(self.base_url + table + "/" + str(id) + "/"),
-                params=params,
-                data=json.dumps(data),
-                headers=self.headers,
-            )
-            if put_request.status_code != 200:
-                warnings.warn("An error occurred while editing id:" + id)
+
         return None
 
     def delete_data(
@@ -117,6 +147,10 @@ class SpecifySession:
         similar setup to the put requests, but also allows for data to be kept
         alongside the ids for convenience, it is just not touched by the script.
         """
+        retries = Retry(
+            total=5, backoff_factor=1, status_forcelist=[502, 503, 504]
+        )
+        self.S.mount(self.instance_url, HTTPAdapter(max_retries=retries))
         for id, values in tqdm(data_to_delete.items(), desc="Deleting records"):
             time.sleep(sleep_in_seconds)
             # Sanity check

@@ -1,9 +1,14 @@
 from helpers.data import load_data, convert_df_to_json, confirmation
 from helpers.caller import SpecifySession
+import logging
 
 from dotenv import load_dotenv
 import os
 import sys
+from datetime import datetime
+
+
+logger = logging.getLogger(__name__)
 
 
 def main(
@@ -15,6 +20,12 @@ def main(
     skip_blank_rows=False,
     input_data_filepath="data/data.csv",
 ):
+    logging.basicConfig(
+        filename=f"logging/{datetime.today().strftime('%Y-%m-%d')}.log",
+        level=logging.INFO,
+    )
+    logger.info(f"\nStarted logging {datetime.now()}")
+
     if method not in ["edit", "delete"]:
         raise ValueError("Method argument must be edit or delete")
 
@@ -52,6 +63,8 @@ def main(
         session.put_data(data_to_add=json_data, table=table)
     if method == "delete" and ack:
         session.delete_data(data_to_delete=json_data, table=table)
+
+    logger.info(f"Logging finished at {datetime.now()}")
 
 
 if __name__ == "__main__":
